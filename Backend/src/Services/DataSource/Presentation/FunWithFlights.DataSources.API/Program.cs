@@ -13,6 +13,7 @@ public class Program
         // Add services to the container.
         builder.AddNpgsqlDbContext<ApplicationContext>("datasourcesdb");
 
+        builder.Services.AddCors();
         builder.Services.AddControllers();
         builder.Services.AddApiVersioning(headerName: "X-Version");
         builder.Services.AddRateLimiting(builder.Configuration);
@@ -32,6 +33,11 @@ public class Program
         {
             app.UseSwagger();
             app.UseSwaggerUI();
+            app.UseCors(x => x
+                .AllowAnyMethod()
+                .AllowAnyHeader()
+                .SetIsOriginAllowed(origin => true) // allow any origin
+                .AllowCredentials()); // allow credentials
         }
 
         app.UseHttpsRedirection();
