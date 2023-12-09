@@ -18,7 +18,7 @@ public static class DependencyInjection
 
     public static IServiceCollection AddDataBase(this IServiceCollection services)
     {
-        services.AddScoped<IApplicationContext>(provider => 
+        services.AddScoped<IApplicationContext>(provider =>
             provider.GetRequiredService<ApplicationContext>());
 
         return services;

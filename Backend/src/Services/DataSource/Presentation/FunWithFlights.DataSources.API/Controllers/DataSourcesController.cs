@@ -6,8 +6,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace FunWithFlights.DataSources.API.Controllers;
 
-[Route("api")]
 [ApiVersion("1.0")]
+[Route("api")]
 [ApiController]
 public class DataSourcesController(IMediator mediator) : ControllerBase
 {

@@ -1,7 +1,5 @@
-using Asp.Versioning;
 using FunWithFlights.DataSources.Infrastructure;
 using FunWithFlights.DataSources.Infrastructure.Data;
-using Microsoft.EntityFrameworkCore;
 
 namespace FunWithFlights.DataSources.API;
 
@@ -15,15 +13,9 @@ public class Program
         // Add services to the container.
         builder.AddNpgsqlDbContext<ApplicationContext>("datasourcesdb");
 
-        builder.Services.AddApiVersioning(setup =>
-        {
-            setup.AssumeDefaultVersionWhenUnspecified = true;
-            setup.DefaultApiVersion = new ApiVersion(1, 0);
-            setup.ReportApiVersions = true;
-            setup.ApiVersionReader = new HeaderApiVersionReader("X-Version");
-        });
-
         builder.Services.AddControllers();
+        builder.Services.AddApiVersioning(headerName: "X-Version");
+        builder.Services.AddRateLimiting(builder.Configuration);
 
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddProblemDetails();
@@ -46,8 +38,9 @@ public class Program
 
         app.UseAuthorization();
 
+        app.UseRateLimiter();
 
-        app.MapControllers();
+        app.MapControllers().RequireRateLimiting("fixed");
 
         app.Run();
     }

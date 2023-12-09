@@ -1,11 +1,17 @@
+using Asp.Versioning;
+using FunWithFlights.ServiceDefaults.Options;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.RateLimiting;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Logging;
 using OpenTelemetry.Logs;
 using OpenTelemetry.Metrics;
 using OpenTelemetry.Trace;
+using System.Threading.RateLimiting;
 
 namespace Microsoft.Extensions.Hosting;
 
@@ -116,4 +122,37 @@ public static class Extensions
             "Microsoft.AspNetCore.Hosting",
             "Microsoft.AspNetCore.Server.Kestrel",
             "System.Net.Http");
+
+    public static IServiceCollection AddApiVersioning(this IServiceCollection services, string headerName)
+    {
+        services.AddApiVersioning(setup =>
+        {
+            setup.AssumeDefaultVersionWhenUnspecified = true;
+            setup.DefaultApiVersion = new ApiVersion(1, 0);
+            setup.ReportApiVersions = true;
+            setup.ApiVersionReader = new HeaderApiVersionReader(headerName);
+        }).AddMvc();
+
+        return services;
+    }
+
+    public static IServiceCollection AddRateLimiting(this IServiceCollection services, IConfiguration configuration)
+    {
+        var rateLimitOptions = new RateLimitOptions();
+        configuration.GetSection(nameof(RateLimitOptions)).Bind(rateLimitOptions);
+
+        services.AddRateLimiter(options =>
+        {
+            options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
+            options.AddFixedWindowLimiter(policyName: "fixed", options =>
+            {
+                options.PermitLimit = rateLimitOptions.PermitLimit;
+                options.Window = TimeSpan.FromSeconds(rateLimitOptions.Window);
+                options.QueueProcessingOrder = QueueProcessingOrder.OldestFirst;
+                options.QueueLimit = rateLimitOptions.QueueLimit;
+            });
+        });
+
+        return services;
+    }
 }
