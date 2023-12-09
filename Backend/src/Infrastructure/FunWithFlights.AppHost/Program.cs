@@ -4,15 +4,15 @@ var builder = DistributedApplication.CreateBuilder(args);
 
 // DataSources
 var dataSourcesDb = builder.AddPostgresContainer("data-sources").AddDatabase("datasourcesdb");
-builder.AddProject<Projects.FunWithFlights_DataSources_DatabaseManager>("funwithflights.datasources.databasemanager")
+builder.AddProject<Projects.FunWithFlights_DataSources_DatabaseManager>("datasources-databasemanager")
     .WithReference(dataSourcesDb);
 
-var dataSourcesApi = builder.AddProject<Projects.FunWithFlights_DataSources_API>("funwithflights.datasources.api")
+var dataSourcesApi = builder.AddProject<Projects.FunWithFlights_DataSources_API>("datasources-api")
     .WithReference(dataSourcesDb);
 
 
-builder.AddNpmApp("frontend", "../../../../frontend/FunWithFlightsUI", "dev")
+builder.AddNpmApp("frontend", "../../../../frontend/FunWithFlightsUI")
     .WithReference(dataSourcesApi)
-    .WithServiceBinding(scheme: "http", hostPort: 5173);
+    .WithServiceBinding(scheme: "http");
 
 builder.Build().Run();

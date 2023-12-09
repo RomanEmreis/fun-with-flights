@@ -1,7 +1,7 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { ListResponse } from '../../api/Common';
 
-const URL = process.env['services__funwithflights.datasources.api__1'];
+const URL = process.env['services__datasources-api__1'];
 
 export interface DataSourceResponse {
     id: number;
