@@ -1,0 +1,6 @@
+@FunWIthFlights.Aggregator.DatabaseManager_HostAddress = http://localhost:5072
+
+GET {{FunWIthFlights.Aggregator.DatabaseManager_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

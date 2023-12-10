@@ -11,7 +11,11 @@ using Microsoft.Extensions.Logging;
 using OpenTelemetry.Logs;
 using OpenTelemetry.Metrics;
 using OpenTelemetry.Trace;
+using Polly.Contrib.WaitAndRetry;
+using Polly.Extensions.Http;
+using Polly;
 using System.Threading.RateLimiting;
+using System.Net;
 
 namespace Microsoft.Extensions.Hosting;
 
@@ -154,5 +158,33 @@ public static class Extensions
         });
 
         return services;
+    }
+
+    public static IServiceCollection AddHttpClient<TClient, TImplementation>(
+        this IServiceCollection services,
+        HttpClientFactoryOptions httpClientFactoryOptions,
+        RetryPolicyOptions retryPolicyOptions)
+        where TClient : class
+        where TImplementation : class, TClient
+    {
+        (string.IsNullOrWhiteSpace(httpClientFactoryOptions.BaseUrl) ?
+            services.AddHttpClient<TClient, TImplementation>() :
+            services.AddHttpClient<TClient, TImplementation>(client => client.BaseAddress = new(httpClientFactoryOptions.BaseUrl)))
+            .SetHandlerLifetime(TimeSpan.FromMinutes(httpClientFactoryOptions.DefaultHttpMessageHandlerLifeTime))
+            .AddPolicyHandler(GetRetryPolicy(retryPolicyOptions));
+
+        return services;
+    }
+
+    private static IAsyncPolicy<HttpResponseMessage> GetRetryPolicy(RetryPolicyOptions retryPolicyOptions)
+    {
+        var delay = Backoff.DecorrelatedJitterBackoffV2(
+            medianFirstRetryDelay: TimeSpan.FromSeconds(retryPolicyOptions.MedianFirstRetryDelay),
+            retryCount: retryPolicyOptions.RetryCount);
+
+        return HttpPolicyExtensions
+            .HandleTransientHttpError()
+            .OrResult(message => message.StatusCode == HttpStatusCode.NotFound)
+            .WaitAndRetryAsync(delay);
     }
 }

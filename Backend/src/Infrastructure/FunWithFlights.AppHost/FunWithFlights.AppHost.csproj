@@ -14,6 +14,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Services\Aggregator\Presentation\FunWithFlights.Aggregator.API\FunWithFlights.Aggregator.API.csproj" />
+    <ProjectReference Include="..\..\Services\Aggregator\Presentation\FunWIthFlights.Aggregator.DatabaseManager\FunWIthFlights.Aggregator.DatabaseManager.csproj" />
+    <ProjectReference Include="..\..\Services\Aggregator\Presentation\FunWithFlights.Aggregator.FlightsScanner\FunWithFlights.Aggregator.FlightsScanner.csproj" />
     <ProjectReference Include="..\..\Services\DataSource\Presentation\FunWithFlights.DataSources.API\FunWithFlights.DataSources.API.csproj" />
     <ProjectReference Include="..\..\Services\DataSource\Presentation\FunWithFlights.DataSources.DatabaseManager\FunWithFlights.DataSources.DatabaseManager.csproj" />
   </ItemGroup>

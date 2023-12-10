@@ -1,4 +1,4 @@
-@FunWithFlights.DataSources.DatabaseManager_HostAddress = http://localhost:5276
+FunWithFlights.DataSources.DatabaseManager_HostAddress = http://localhost:5276
 
 GET {{FunWithFlights.DataSources.DatabaseManager_HostAddress}}/weatherforecast/
 Accept: application/json
