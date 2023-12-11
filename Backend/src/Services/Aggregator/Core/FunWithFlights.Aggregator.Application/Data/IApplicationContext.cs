@@ -8,7 +8,10 @@ public interface IApplicationContext
 {
     DbSet<FlightRoute> Routes { get; }
 
-    IDbContextTransaction BeginTransaction();
-    IExecutionStrategy CreateExecutionStrategy();
+    public Task UseTransaction(
+        Func<IApplicationContext, CancellationToken, Task> operation,
+        string errorMessage,
+        CancellationToken cancellationToken = default);
+
     Task SaveChangesAsync(CancellationToken cancellationToken = default);
 }

@@ -1,12 +1,15 @@
 import { configureStore, ThunkAction, Action, combineReducers } from "@reduxjs/toolkit"
 import { dataSourcesApiSlice } from "../features/DataSources/DataSourcesApiSlice"
+import { aggregatorApiSlice } from "../features/Flights/FlightsApiSlice"
 
 const rootReducer = combineReducers({
-  [dataSourcesApiSlice.reducerPath]: dataSourcesApiSlice.reducer
+  [dataSourcesApiSlice.reducerPath]: dataSourcesApiSlice.reducer,
+  [aggregatorApiSlice.reducerPath]: aggregatorApiSlice.reducer
 });
 
 const middlewares = [
-  dataSourcesApiSlice.middleware
+  dataSourcesApiSlice.middleware,
+  aggregatorApiSlice.middleware
 ];
 
 export const store = configureStore({

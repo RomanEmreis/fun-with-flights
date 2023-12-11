@@ -16,6 +16,7 @@ using Polly.Extensions.Http;
 using Polly;
 using System.Threading.RateLimiting;
 using System.Net;
+using Azure.Monitor.OpenTelemetry.Exporter;
 
 namespace Microsoft.Extensions.Hosting;
 
@@ -89,8 +90,8 @@ public static class Extensions
         //    .WithMetrics(metrics => metrics.AddPrometheusExporter());
 
         // Uncomment the following lines to enable the Azure Monitor exporter (requires the Azure.Monitor.OpenTelemetry.Exporter package)
-        // builder.Services.AddOpenTelemetry()
-        //    .UseAzureMonitor();
+        //builder.Services.AddOpenTelemetry()
+        //   .WithMetrics(metrics => metrics.AddAzureMonitorMetricExporter());
 
         return builder;
     }

@@ -1,12 +1,13 @@
 ﻿using FunWithFlights.Aggregator.Application.Data;
+using FunWithFlights.Aggregator.Application.Data.Extensions;
 using FunWithFlights.Aggregator.Application.Features.FlightRoutes.Responses;
 using FunWithFlights.Aggregator.Application.Services.DataSources;
 using FunWithFlights.Aggregator.Application.Services.FlightsProvider;
 using FunWithFlights.Aggregator.Domain.Entities;
+using LinqToDB.EntityFrameworkCore;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using OpenTelemetry.Logs;
 using System.Diagnostics;
 
 namespace FunWithFlights.Aggregator.Application.Features.FlightRoutes.Commands;
@@ -30,7 +31,7 @@ internal sealed class RefreshFlightRoutesHandler(
             return;
         }
 
-        logger.LogInformation($"Found {dataSources.Results.Count()} data sources.");
+        logger.LogInformation("Found {Count} data sources.", dataSources.Results.Count());
         logger.LogInformation("Scanning routes...");
         
         var sw = Stopwatch.StartNew();
@@ -46,45 +47,37 @@ internal sealed class RefreshFlightRoutesHandler(
         // waiting once all flight routes will be ready
         await Task.WhenAll(routesByDataSources.Values);
 
-        var executionStrategy = context.CreateExecutionStrategy();
-        await executionStrategy.ExecuteAsync(async () => 
+        await context.UseTransaction(async (
+            IApplicationContext context,
+            CancellationToken cancellationToken) => 
         {
-            using var transaction = context.BeginTransaction();
+            // removing all routes since they're expired
+            await context.Routes.ExecuteDeleteAsync(cancellationToken);
 
-            try
+            LinqToDBForEFTools.Initialize();
+
+            foreach (var (dataSourceName, flightRoutesTask) in routesByDataSources)
             {
-                // removing all routes since they're expired
-                await context.Routes.ExecuteDeleteAsync(cancellationToken);
+                cancellationToken.ThrowIfCancellationRequested();
 
-                foreach (var (dataSourceName, flightRoutesTask) in routesByDataSources)
+                var flightRoutes = await flightRoutesTask;
+                if (flightRoutes is null)
                 {
-                    cancellationToken.ThrowIfCancellationRequested();
-
-                    var flightRoutes = await flightRoutesTask;
-                    if (flightRoutes is null)
-                    {
-                        logger.LogWarning($"Couldn't able to read flight routes of data source: {dataSourceName}");
-                        continue;
-                    }
-
-                    context.Routes.AddRange(
-                        flightRoutes
-                            .Where(IsValidFlightRoute)
-                            .Select(flightRoute => ConvertToDomain(dataSourceName, flightRoute)));
-
-                    await context.SaveChangesAsync(cancellationToken);
+                    logger.LogWarning("Couldn't able to read flight routes of data source: {dataSourceName}", dataSourceName);
+                    continue;
                 }
 
-                await transaction.CommitAsync(cancellationToken);
+                await context.Routes.ExecuteInsertAsync(
+                    flightRoutes
+                        .Where(IsValidFlightRoute)
+                        .Select(flightRoute => ConvertToDomain(dataSourceName, flightRoute)),
+                    cancellationToken);
             }
-            catch (Exception ex)
-            {
-                transaction.Rollback();
-                logger.LogError(ex, "An exception occurred while scanning flight routes");
-            }
-        });
+        }, 
+        errorMessage: "An exception occurred while scanning flight routes",
+        cancellationToken);
 
-        logger.LogInformation($"Scanning finished in {sw.ElapsedMilliseconds}ms");
+        logger.LogInformation("Scanning finished in {ElapsedMilliseconds}ms", sw.ElapsedMilliseconds);
     }
 
     private static bool IsValidFlightRoute(FlightRouteResponse flightRoute) =>

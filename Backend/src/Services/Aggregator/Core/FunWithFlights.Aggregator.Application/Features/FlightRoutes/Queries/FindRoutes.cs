@@ -9,7 +9,7 @@ public record FindRoutes(
     string SourceAirport,
     string DestinationAirport,
     DateOnly DateOfFlight,
-    DateOnly DateOfReturn) : IRequest<FlightRoutesResponse>;
+    DateOnly? DateOfReturn) : IRequest<FlightRoutesResponse>;
 
 internal sealed class FindRouteHandler(IApplicationContext context) : IRequestHandler<FindRoutes, FlightRoutesResponse>
 {

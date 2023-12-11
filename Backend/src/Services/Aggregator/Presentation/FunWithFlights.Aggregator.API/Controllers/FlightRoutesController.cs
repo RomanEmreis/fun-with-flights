@@ -16,4 +16,11 @@ public class FlightRoutesController(IMediator mediator) : ControllerBase
         var results = await mediator.Send(command, cancellationToken);
         return Ok(results);
     }
+
+    [HttpGet("airports")]
+    public async Task<IActionResult> GetAirports(CancellationToken cancellationToken)
+    {
+        var results = await mediator.Send(new GetAirports(), cancellationToken);
+        return Ok(results);
+    }
 }

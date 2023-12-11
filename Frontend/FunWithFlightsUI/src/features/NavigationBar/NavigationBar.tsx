@@ -9,7 +9,6 @@ import Menu from '@mui/material/Menu';
 import MenuIcon from '@mui/icons-material/Menu';
 import Container from '@mui/material/Container';
 import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import FlightIcon from '@mui/icons-material/Flight';
@@ -19,7 +18,7 @@ import "./NavigationBar.scss"
 
 const pages: RouteInfo[] = [
     { title: 'Flights', path: '/flights' },
-    { title: 'Bookings', path: '/bookings' },
+    /* { title: 'Bookings', path: '/bookings' }, */
     { title: 'Data Sources', path: '/data-sources' }
 ];
 

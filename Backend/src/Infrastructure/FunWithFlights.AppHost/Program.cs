@@ -23,9 +23,9 @@ builder.AddProject<Projects.FunWithFlights_Aggregator_FlightsScanner>("flightssc
     .WithReference(dataSourcesApi);
 
 // Frontend
-builder.AddNpmApp("frontend", "../../../../frontend/FunWithFlightsUI")
-    .WithReference(dataSourcesApi)
-    .WithReference(aggregatorApi)
-    .WithServiceBinding(scheme: "http");
+//builder.AddNpmApp("frontend", "../../../../frontend/FunWithFlightsUI")
+//    .WithReference(dataSourcesApi)
+//    .WithReference(aggregatorApi)
+//    .WithServiceBinding(scheme: "http");
 
 builder.Build().Run();
