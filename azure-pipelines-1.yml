@@ -14,11 +14,9 @@ steps:
   inputs:
     versionSpec: '10.x'
   displayName: 'Install Node.js'
-  
-- script: cd "Frontend/FunWithFlightsUI"
-  displayName: 'targeting frontend'
 
 - script: |
+    cd "Frontend/FunWithFlightsUI"
     npm install
     npm run build
   displayName: 'npm install and build'
