@@ -15,7 +15,7 @@ steps:
     versionSpec: '10.x'
   displayName: 'Install Node.js'
   
-- script: cd **/Frontend/FunWithFlightsUI/
+- script: ls
   displayName: 'targeting frontend'
 
 - script: |
