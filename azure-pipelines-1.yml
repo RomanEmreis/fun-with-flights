@@ -15,7 +15,7 @@ steps:
     versionSpec: '10.x'
   displayName: 'Install Node.js'
   
-- script: ls
+- script: cd Frontend/FunWithFlights
   displayName: 'targeting frontend'
 
 - script: |
