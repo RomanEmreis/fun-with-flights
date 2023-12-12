@@ -25,7 +25,7 @@ internal sealed class RefreshFlightRoutesHandler(
         logger.LogInformation("Fetching data sources...");
 
         var dataSources = await dataSourcesService.GetAvailableDataSourcesAsync(cancellationToken);
-        if (dataSources?.Results is null)
+        if (dataSources?.Results is null || !dataSources.Results.Any())
         {
             logger.LogWarning("Couldn't find any data sources");
             return;
@@ -44,7 +44,7 @@ internal sealed class RefreshFlightRoutesHandler(
                 dataSource => dataSource.Name!,
                 dataSource => flightsProviderService.GetFlightRoutesAsync(dataSource.Url!, cancellationToken));
 
-        // waiting once all flight routes will be ready
+        // waiting once all flight routes will be loaded
         await Task.WhenAll(routesByDataSources.Values);
 
         await context.UseTransaction(async (

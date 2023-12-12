@@ -1,4 +1,5 @@
 ﻿using FunWithFlights.Aggregator.Application.Data;
+using FunWithFlights.Aggregator.Application.Features.FlightRoutes.Common;
 using FunWithFlights.Aggregator.Application.Features.FlightRoutes.Responses;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -15,21 +16,13 @@ internal sealed class FindRouteHandler(IApplicationContext context) : IRequestHa
 {
     public async Task<FlightRoutesResponse> Handle(FindRoutes request, CancellationToken cancellationToken)
     {
-        var (source, destination, _, _) = request;
+        var (source, destination, _, _) = request; // ignore DateOfFlight and DateOfReturn for now
 
         var flightRoutes = await context.Routes
             .Where(route => 
                 route.SourceAirport == source &&
                 route.DestinationAirport == destination)
-            .Select(route => new FlightRouteResponse
-            {
-                SourceAirport = route.SourceAirport,
-                DestinationAirport = route.DestinationAirport,
-                Airline = route.Airline,
-                CodeShare = route.CodeShare,
-                Equipment = route.Equipment,
-                Stops = route.Stops,
-            })
+            .Select(route => ResponseHelper.ConvertToResponse(route))
             .ToListAsync(cancellationToken);
 
         return new FlightRoutesResponse(flightRoutes);

@@ -14,5 +14,5 @@ public class ApplicationContext(DbContextOptions<ApplicationContext> options) : 
         builder.ApplyConfigurationsFromAssembly(typeof(ApplicationContext).Assembly);
     }
 
-    public Task SaveChangesAsync(CancellationToken cancellationToken = default) => base.SaveChangesAsync(cancellationToken);
+    public new Task SaveChangesAsync(CancellationToken cancellationToken = default) => base.SaveChangesAsync(cancellationToken);
 }

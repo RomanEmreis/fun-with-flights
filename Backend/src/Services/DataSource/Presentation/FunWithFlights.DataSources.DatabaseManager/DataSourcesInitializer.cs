@@ -29,4 +29,10 @@ internal class DataSourcesInitializer(IServiceProvider serviceProvider, ILogger<
 
         logger.LogInformation("Database initialization completed after {ElapsedMilliseconds}ms", sw.ElapsedMilliseconds);
     }
+
+    public override void Dispose()
+    {
+        _activitySource.Dispose();
+        base.Dispose();
+    }
 }

@@ -1,6 +1,5 @@
 ﻿using FunWithFlights.Aggregator.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Storage;
 
 namespace FunWithFlights.Aggregator.Application.Data;
 

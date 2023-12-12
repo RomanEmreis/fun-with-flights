@@ -4,8 +4,10 @@ using System.Net.Http.Json;
 
 namespace FunWithFlights.Aggregator.Infrastructure.Services.FlightsProvider;
 
-internal class FlightsProviderService(HttpClient httpClient) : IFlightsProviderService
+public class FlightsProviderService(HttpClient httpClient) : IFlightsProviderService
 {
     public Task<FlightRouteResponse[]?> GetFlightRoutesAsync(string url, CancellationToken cancellationToken = default) =>
-        httpClient.GetFromJsonAsync<FlightRouteResponse[]?>(url, cancellationToken);
+        string.IsNullOrWhiteSpace(url)
+            ? throw new ArgumentException($"'{nameof(url)}' cannot be null or whitespace.", nameof(url))
+            : httpClient.GetFromJsonAsync<FlightRouteResponse[]?>(url, cancellationToken);
 }

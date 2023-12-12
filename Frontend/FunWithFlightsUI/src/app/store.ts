@@ -1,8 +1,15 @@
-import { configureStore, ThunkAction, Action, combineReducers } from "@reduxjs/toolkit"
-import { dataSourcesApiSlice } from "../features/DataSources/DataSourcesApiSlice"
-import { aggregatorApiSlice } from "../features/Flights/FlightsApiSlice"
+import { 
+  configureStore, 
+  ThunkAction, 
+  Action, 
+  combineReducers
+} from "@reduxjs/toolkit";
+import { dataSourcesApiSlice } from "../features/DataSources/DataSourcesApiSlice";
+import { aggregatorApiSlice } from "../features/Flights/FlightsApiSlice";
+import flightSearchSlice from "../features/Flights/FlightsSlice";
 
 const rootReducer = combineReducers({
+  flightSearchSlice,
   [dataSourcesApiSlice.reducerPath]: dataSourcesApiSlice.reducer,
   [aggregatorApiSlice.reducerPath]: aggregatorApiSlice.reducer
 });

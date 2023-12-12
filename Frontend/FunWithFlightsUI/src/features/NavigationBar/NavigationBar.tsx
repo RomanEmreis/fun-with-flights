@@ -13,12 +13,31 @@ import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import FlightIcon from '@mui/icons-material/Flight';
 import { ButtonRoute, MenuItemRoute, RouteInfo } from './NavigationRoute';
+import { SxProps } from '@mui/material';
 
-import "./NavigationBar.scss"
+const headerStyle: SxProps = {
+    mr: 2,
+    display: { xs: 'none', md: 'flex' },
+    fontFamily: 'monospace',
+    fontWeight: 700,
+    letterSpacing: '.3rem',
+    color: 'inherit',
+    textDecoration: 'none',
+};
+
+const smallHeaderStyle: SxProps = {
+    mr: 2,
+    display: { xs: 'flex', md: 'none' },
+    flexGrow: 1,
+    fontFamily: 'monospace',
+    fontWeight: 700,
+    letterSpacing: '.1rem',
+    color: 'inherit',
+    textDecoration: 'none',
+};
 
 const pages: RouteInfo[] = [
     { title: 'Flights', path: '/flights' },
-    /* { title: 'Bookings', path: '/bookings' }, */
     { title: 'Data Sources', path: '/data-sources' }
 ];
 
@@ -43,16 +62,7 @@ const NavigationBar: FC = () => {
                         noWrap
                         component="a"
                         href="#app-bar-with-responsive-menu"
-                        sx={{
-                            mr: 2,
-                            display: { xs: 'none', md: 'flex' },
-                            fontFamily: 'monospace',
-                            fontWeight: 700,
-                            letterSpacing: '.3rem',
-                            color: 'inherit',
-                            textDecoration: 'none',
-                        }}
-                    >
+                        sx={headerStyle}>
                         Fun With Flights
                     </Typography>
 
@@ -83,8 +93,7 @@ const NavigationBar: FC = () => {
                             onClose={handleCloseNavMenu}
                             sx={{
                                 display: { xs: 'block', md: 'none' },
-                            }}
-                        >
+                            }}>
                             {pages.map((page) => (<MenuItemRoute route={page} onClick={handleCloseNavMenu} />))}
                         </Menu>
                     </Box>
@@ -94,17 +103,7 @@ const NavigationBar: FC = () => {
                         noWrap
                         component="a"
                         href="#app-bar-with-responsive-menu"
-                        sx={{
-                            mr: 2,
-                            display: { xs: 'flex', md: 'none' },
-                            flexGrow: 1,
-                            fontFamily: 'monospace',
-                            fontWeight: 700,
-                            letterSpacing: '.3rem',
-                            color: 'inherit',
-                            textDecoration: 'none',
-                        }}
-                    >
+                        sx={smallHeaderStyle}>
                         Fun With Flights
                     </Typography>
                     <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>

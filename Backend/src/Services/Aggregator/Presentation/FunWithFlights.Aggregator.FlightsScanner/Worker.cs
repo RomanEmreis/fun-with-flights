@@ -30,4 +30,10 @@ public class Worker(
             await _timer.WaitForNextTickAsync(stoppingToken) &&
             !stoppingToken.IsCancellationRequested);
     }
+
+    public override void Dispose()
+    {
+        _timer.Dispose();
+        base.Dispose();
+    }
 }

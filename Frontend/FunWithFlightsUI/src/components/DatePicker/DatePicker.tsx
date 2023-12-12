@@ -1,6 +1,16 @@
-import { InputAdornment, Popover, SxProps, TextField } from "@mui/material";
-import dayjs, { Dayjs } from 'dayjs';
-import { FC, SyntheticEvent, useCallback, useMemo, useRef, useState } from "react";
+import { 
+    InputAdornment, 
+    Popover, 
+    SxProps, 
+    TextField
+} from "@mui/material";
+import { 
+    FC, 
+    SyntheticEvent, 
+    useCallback, 
+    useRef, 
+    useState
+} from "react";
 import ReactDatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
@@ -8,19 +18,15 @@ import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 export interface DatePickerParameters {
     sx?: SxProps;
     label?: string;
-    minDate?: Dayjs;
-    maxDate?: Dayjs;
     value?: Date | null;
     onChange: (date: Date | null, event: SyntheticEvent<any, Event> | undefined) => void;
     isInErrorState?: boolean;
-    helperMessage?: any;/*  */
+    helperMessage?: any;
 };
 
 export const DatePicker: FC<DatePickerParameters> = ({
     sx,
     label = 'Date',
-    minDate = null,
-    maxDate = null,
     value,
     onChange,
     isInErrorState = false,
@@ -77,8 +83,7 @@ export const DatePicker: FC<DatePickerParameters> = ({
                 onClick={toggleModal}
                 error={isInErrorState}
                 helperText={helperMessage}
-                value={value?.toDateString()}
-            />
+                value={value?.toDateString()} />
             <Popover
                 open={isModalOpen}
                 anchorEl={textFieldRef.current}
@@ -87,8 +92,7 @@ export const DatePicker: FC<DatePickerParameters> = ({
                     horizontal: "left"
                 }}
                 disableEscapeKeyDown={false}
-                onKeyUp={modalKeyUpHandler}
-            >
+                onKeyUp={modalKeyUpHandler}>
                 <ReactDatePicker
                     inline={true}
                     onClickOutside={toggleModal}
@@ -101,8 +105,7 @@ export const DatePicker: FC<DatePickerParameters> = ({
                     onChangeRaw={(event: any) => event.preventDefault()}
                     open={isModalOpen}
                     onCalendarClose={toggleModal}
-                    onSelect={toggleModal}
-                />
+                    onSelect={toggleModal} />
             </Popover>
         </>
     );

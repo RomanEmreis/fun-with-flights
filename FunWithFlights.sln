@@ -52,6 +52,18 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FunWithFlights.Aggregator.F
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FunWIthFlights.Aggregator.DatabaseManager", "Backend\src\Services\Aggregator\Presentation\FunWIthFlights.Aggregator.DatabaseManager\FunWIthFlights.Aggregator.DatabaseManager.csproj", "{368412B9-95F4-4F78-BE9F-7E5ECA2AE454}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{0D77C353-3015-452C-9822-B4010C4A3B76}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Aggregator", "Aggregator", "{A8AA729D-90B8-4D91-A992-DADC4C9F96A0}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastructure", "{B406DC8A-812E-4340-8883-047E7E414783}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FunWithFlights.Aggregator.Infrastructure.Tests", "Backend\test\Services\Aggregator\Infrastructure\FunWithFlights.Aggregator.Infrastructure\FunWithFlights.Aggregator.Infrastructure.Tests.csproj", "{FC4C174A-BE0A-4D21-B479-F3DDD593EA42}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{C7C0C3C0-E7FF-4266-B0C5-0BDE98D9E14A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FunWithFlights.Aggregator.Application.Tests", "Backend\test\Services\Aggregator\Core\FunWithFlights.Aggregator.Application\FunWithFlights.Aggregator.Application.Tests.csproj", "{B9AB94EC-23C9-4F98-AAE9-FCE52DBAB030}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -110,6 +122,14 @@ Global
 		{368412B9-95F4-4F78-BE9F-7E5ECA2AE454}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{368412B9-95F4-4F78-BE9F-7E5ECA2AE454}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{368412B9-95F4-4F78-BE9F-7E5ECA2AE454}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FC4C174A-BE0A-4D21-B479-F3DDD593EA42}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FC4C174A-BE0A-4D21-B479-F3DDD593EA42}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FC4C174A-BE0A-4D21-B479-F3DDD593EA42}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FC4C174A-BE0A-4D21-B479-F3DDD593EA42}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B9AB94EC-23C9-4F98-AAE9-FCE52DBAB030}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B9AB94EC-23C9-4F98-AAE9-FCE52DBAB030}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B9AB94EC-23C9-4F98-AAE9-FCE52DBAB030}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B9AB94EC-23C9-4F98-AAE9-FCE52DBAB030}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -138,6 +158,12 @@ Global
 		{1C8650CA-B214-4BA9-8B32-875AEAC9258C} = {23CE30FB-CC47-4A38-B666-95FD826A449C}
 		{02840FB0-FE29-4946-B682-B07C73F8883A} = {23CE30FB-CC47-4A38-B666-95FD826A449C}
 		{368412B9-95F4-4F78-BE9F-7E5ECA2AE454} = {23CE30FB-CC47-4A38-B666-95FD826A449C}
+		{0D77C353-3015-452C-9822-B4010C4A3B76} = {968EB350-A2CA-437C-B1DD-D246DB313132}
+		{A8AA729D-90B8-4D91-A992-DADC4C9F96A0} = {0D77C353-3015-452C-9822-B4010C4A3B76}
+		{B406DC8A-812E-4340-8883-047E7E414783} = {A8AA729D-90B8-4D91-A992-DADC4C9F96A0}
+		{FC4C174A-BE0A-4D21-B479-F3DDD593EA42} = {B406DC8A-812E-4340-8883-047E7E414783}
+		{C7C0C3C0-E7FF-4266-B0C5-0BDE98D9E14A} = {A8AA729D-90B8-4D91-A992-DADC4C9F96A0}
+		{B9AB94EC-23C9-4F98-AAE9-FCE52DBAB030} = {C7C0C3C0-E7FF-4266-B0C5-0BDE98D9E14A}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {5D808D77-7EE7-4E49-A0FC-CF2A33B4F242}

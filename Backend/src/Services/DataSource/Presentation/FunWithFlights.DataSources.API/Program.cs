@@ -1,5 +1,7 @@
 using FunWithFlights.DataSources.Infrastructure;
 using FunWithFlights.DataSources.Infrastructure.Data;
+using Microsoft.OpenApi.Models;
+using System.Reflection;
 
 namespace FunWithFlights.DataSources.API;
 
@@ -20,7 +22,19 @@ public class Program
 
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddProblemDetails();
-        builder.Services.AddSwaggerGen();
+        builder.Services.AddSwaggerGen(options =>
+        {
+            options.SwaggerDoc("v1", new OpenApiInfo
+            {
+                Version = "v1",
+                Title = "Data Sources API",
+                Description = "Web API for managing data sources",
+                TermsOfService = new Uri("https://example.com/terms")
+            });
+
+            var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+            options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
+        });
 
         builder.Services.AddDataSources();
 

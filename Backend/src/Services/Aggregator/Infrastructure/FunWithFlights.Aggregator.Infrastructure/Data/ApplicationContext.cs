@@ -1,7 +1,6 @@
 ﻿using FunWithFlights.Aggregator.Application.Data;
 using FunWithFlights.Aggregator.Domain.Entities;
 using LinqToDB.Data;
-using LinqToDB.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 

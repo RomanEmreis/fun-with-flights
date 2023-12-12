@@ -1,5 +1,6 @@
 ﻿using FunWithFlights.DataSources.Application.Data;
 using FunWithFlights.DataSources.Application.Features.DataSources.Responses;
+using FunWithFlights.DataSources.Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -12,14 +13,17 @@ internal sealed class GetDataSourcesHandler(IApplicationContext context) : IRequ
     public async Task<DataSourcesResponse> Handle(GetDataSources request, CancellationToken cancellationToken)
     {
         var dataSources = await context.DataSources
-            .Select(dataSource => new DataSourceResponse 
-            {
-                Id = dataSource.Id,
-                Name = dataSource.Name,
-                Description = dataSource.Description,
-                Url = dataSource.Url,
-            }).ToListAsync(cancellationToken);
+            .Select(dataSource => ConvertToResponse(dataSource))
+            .ToListAsync(cancellationToken);
 
         return new DataSourcesResponse(dataSources);
     }
+
+    private static DataSourceResponse ConvertToResponse(DataSource dataSource) => new()
+    {
+        Id = dataSource.Id,
+        Name = dataSource.Name,
+        Description = dataSource.Description,
+        Url = dataSource.Url
+    };
 }
