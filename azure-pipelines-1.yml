@@ -15,6 +15,9 @@ steps:
     versionSpec: '10.x'
   displayName: 'Install Node.js'
 
+- script: nvm install v18.17.0
+  displayName: 'Update Node version for TS'
+
 - script: |
     cd "Frontend/FunWithFlightsUI"
     nvm install v18.17.0
