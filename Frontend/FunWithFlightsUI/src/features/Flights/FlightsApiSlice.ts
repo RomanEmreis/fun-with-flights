@@ -4,7 +4,7 @@ import {
 } from '@reduxjs/toolkit/query/react';
 import { ListResponse } from '../../api/Common';
 
-const URL = process.env['services__aggregator-api__1'];
+const URL = process.env['services__aggregator-api__https__0'];
 
 export interface AirportsResponse {
     availableSourceAirports: AirportResponse[];

@@ -1,9 +1,7 @@
-using FunWithFlights.AppHost.Extensions;
-
 var builder = DistributedApplication.CreateBuilder(args);
 
 // DataSources
-var dataSourcesDb = builder.AddPostgresContainer("data-sources").AddDatabase("datasourcesdb");
+var dataSourcesDb = builder.AddPostgres("data-sources").AddDatabase("datasourcesdb");
 builder.AddProject<Projects.FunWithFlights_DataSources_DatabaseManager>("datasources-databasemanager")
     .WithReference(dataSourcesDb);
 
@@ -11,7 +9,7 @@ var dataSourcesApi = builder.AddProject<Projects.FunWithFlights_DataSources_API>
     .WithReference(dataSourcesDb);
 
 // Aggregator
-var flightsDb = builder.AddPostgresContainer("aggregator").AddDatabase("flightsdb");
+var flightsDb = builder.AddPostgres("aggregator").AddDatabase("flightsdb");
 var aggregatorApi = builder.AddProject<Projects.FunWithFlights_Aggregator_API>("aggregator-api")
     .WithReference(flightsDb);
 
@@ -23,9 +21,9 @@ builder.AddProject<Projects.FunWithFlights_Aggregator_FlightsScanner>("flightssc
     .WithReference(dataSourcesApi);
 
 // Frontend
-//builder.AddNpmApp("frontend", "../../../../frontend/FunWithFlightsUI")
-//    .WithReference(dataSourcesApi)
-//    .WithReference(aggregatorApi)
-//    .WithServiceBinding(scheme: "http");
+builder.AddNpmApp("frontend", "../../../../frontend/FunWithFlightsUI")
+    .WithReference(dataSourcesApi)
+    .WithReference(aggregatorApi)
+    .WithHttpsEndpoint(env: "PORT");
 
 builder.Build().Run();

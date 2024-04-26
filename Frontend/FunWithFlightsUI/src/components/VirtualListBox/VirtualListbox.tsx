@@ -18,7 +18,7 @@ const renderRow = (props: ListChildComponentProps) => {
         ...style,
         top: (style.top as number) + LISTBOX_PADDING,
     };
-
+    
     return (
         <Typography component="li" {...dataSet[0]} noWrap style={inlineStyle}>
             {dataSet[1].name}
