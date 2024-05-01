@@ -16,7 +16,6 @@ using Polly.Extensions.Http;
 using Polly;
 using System.Threading.RateLimiting;
 using System.Net;
-using Azure.Monitor.OpenTelemetry.Exporter;
 
 namespace Microsoft.Extensions.Hosting;
 
@@ -36,7 +35,7 @@ public static class Extensions
             http.AddStandardResilienceHandler();
 
             // Turn on service discovery by default
-            http.UseServiceDiscovery();
+            http.AddServiceDiscovery();
         });
 
         return builder;
