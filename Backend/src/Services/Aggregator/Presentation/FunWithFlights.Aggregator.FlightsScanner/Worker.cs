@@ -10,7 +10,7 @@ public class Worker(
     ILogger<Worker> logger,
     IOptions<FlightScanningOptions> options) : BackgroundService
 {
-    private readonly PeriodicTimer _timer = new(TimeSpan.FromHours(options.Value.Period));
+    private readonly PeriodicTimer _timer = new(TimeSpan.FromMinutes(options.Value.Period));
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
@@ -24,7 +24,14 @@ public class Worker(
             using var scope = serviceScopeFactory.CreateScope();
             var mediator = scope.ServiceProvider.GetRequiredService<IMediator>();
 
-            await mediator.Publish(new RefreshFlightRoutes(), stoppingToken);
+            try
+            {
+                await mediator.Publish(new RefreshFlightRoutes(), stoppingToken);
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, "An error occurred while updating data sources");
+            }
         }
         while (
             await _timer.WaitForNextTickAsync(stoppingToken) &&

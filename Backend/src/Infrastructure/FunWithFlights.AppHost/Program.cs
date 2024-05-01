@@ -1,5 +1,8 @@
 var builder = DistributedApplication.CreateBuilder(args);
 
+// FlightRouter - mock service that provides flight routes
+builder.AddProject<Projects.FunWithFlights_Aggregator_FlightRouter>("flightrouter");
+
 // DataSources
 var dataSourcesDb = builder.AddPostgres("data-sources").AddDatabase("datasourcesdb");
 builder.AddProject<Projects.FunWithFlights_DataSources_DatabaseManager>("datasources-databasemanager")
@@ -25,5 +28,6 @@ builder.AddNpmApp("frontend", "../../../../frontend/FunWithFlightsUI")
     .WithReference(dataSourcesApi)
     .WithReference(aggregatorApi)
     .WithHttpsEndpoint(env: "PORT");
+
 
 builder.Build().Run();
