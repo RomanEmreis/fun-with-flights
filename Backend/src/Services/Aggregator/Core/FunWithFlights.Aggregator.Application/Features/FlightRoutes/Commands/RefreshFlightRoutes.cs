@@ -7,6 +7,7 @@ using FunWithFlights.Aggregator.Domain.Entities;
 using LinqToDB.EntityFrameworkCore;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Logging;
 using System.Diagnostics;
 
@@ -18,6 +19,7 @@ internal sealed class RefreshFlightRoutesHandler(
     IDataSourcesService dataSourcesService,
     IFlightsProviderService flightsProviderService,
     IApplicationContext context,
+    IDistributedCache cache,
     ILogger<RefreshFlightRoutes> logger) : INotificationHandler<RefreshFlightRoutes>
 {
     public async Task Handle(RefreshFlightRoutes request, CancellationToken cancellationToken)
@@ -76,6 +78,8 @@ internal sealed class RefreshFlightRoutesHandler(
         }, 
         errorMessage: "An exception occurred while scanning flight routes",
         cancellationToken);
+
+        await cache.RemoveAsync($"{CommonConstants.Cache.Namespace}:*", cancellationToken);
 
         logger.LogInformation("Scanning finished in {ElapsedMilliseconds}ms", sw.ElapsedMilliseconds);
     }

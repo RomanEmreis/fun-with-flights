@@ -43,6 +43,6 @@ public sealed class GetRoutesHandler(IApplicationContext context, IDistributedCa
         return JsonSerializer.Deserialize<FlightRoutesResponse>(cachedFlightRoutes) ?? new([]);
     }
 
-    private static string CreateCacheKey(GetRoutes request) => $"{nameof(GetRoutes)}:s:{request.Start}:l:{request.Limit}";
+    private static string CreateCacheKey(GetRoutes request) => CommonHelpers.Cache.CreateCacheKey($"{nameof(GetRoutes)}:s:{request.Start}:l:{request.Limit}");
     private static DistributedCacheEntryOptions CreateOptions() => new() { SlidingExpiration = TimeSpan.FromSeconds(DefaultSlidingExpirationSeconds) };
 }

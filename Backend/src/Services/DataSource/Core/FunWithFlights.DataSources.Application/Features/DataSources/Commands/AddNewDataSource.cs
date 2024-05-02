@@ -1,5 +1,4 @@
 ﻿using FunWithFlights.DataSources.Application.Data;
-using FunWithFlights.DataSources.Application.Features.DataSources.Queries;
 using FunWithFlights.DataSources.Domain.Entities;
 using MediatR;
 using Microsoft.Extensions.Caching.Distributed;
@@ -20,6 +19,6 @@ internal sealed class AddNewDataSourceHandler(IApplicationContext context, IDist
         context.DataSources.Add(newDataSource);
 
         await context.SaveChangesAsync(cancellationToken);
-        await cache.RemoveAsync(nameof(GetDataSources), cancellationToken);
+        await cache.RemoveAsync($"{CommonConstants.Cache.Namespace}:*", cancellationToken);
     }
 }

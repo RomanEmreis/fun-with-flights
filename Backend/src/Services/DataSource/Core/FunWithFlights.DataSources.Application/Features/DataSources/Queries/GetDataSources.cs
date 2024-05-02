@@ -16,7 +16,7 @@ internal sealed class GetDataSourcesHandler(IApplicationContext context, IDistri
 
     public async Task<DataSourcesResponse> Handle(GetDataSources request, CancellationToken cancellationToken)
     {
-        var cacheKey          = nameof(GetDataSources);
+        var cacheKey          = CreateCacheKey();
         var cachedDataSources = await cache.GetAsync(cacheKey, cancellationToken);
 
         if (cachedDataSources is null)
@@ -49,4 +49,5 @@ internal sealed class GetDataSourcesHandler(IApplicationContext context, IDistri
     };
 
     private static DistributedCacheEntryOptions CreateOptions() => new() { SlidingExpiration = TimeSpan.FromHours(DefaultSlidingExpirationHours) };
+    private static string CreateCacheKey() => CommonHelpers.Cache.CreateCacheKey($"{nameof(GetDataSources)}");
 }

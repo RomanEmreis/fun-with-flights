@@ -49,6 +49,7 @@ internal sealed class FindRouteHandler(IApplicationContext context, IDistributed
     }
 
     private static DistributedCacheEntryOptions CreateOptions() => new() { SlidingExpiration = TimeSpan.FromSeconds(DefaultSlidingExpirationSeconds) };
-    private static string CreateCacheKey(FindRoutes request) => 
-        $"{nameof(FindRoutes)}:sa:{request.SourceAirport}:da:{request.DestinationAirport}:dof:{request.DateOfFlight:yyyy-MM-dd}:dor:{request.DateOfReturn:yyyy-MM-dd}";
+    private static string CreateCacheKey(FindRoutes request) =>
+        CommonHelpers.Cache.CreateCacheKey(
+            $"{nameof(FindRoutes)}:sa:{request.SourceAirport}:da:{request.DestinationAirport}:dof:{request.DateOfFlight:yyyy-MM-dd}:dor:{request.DateOfReturn:yyyy-MM-dd}");
 }

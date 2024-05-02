@@ -1,5 +1,4 @@
 ﻿using FunWithFlights.DataSources.Application.Data;
-using FunWithFlights.DataSources.Application.Features.DataSources.Queries;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Distributed;
@@ -17,7 +16,7 @@ internal sealed class RemoveDataSourceHandler(IApplicationContext context, IDist
             .Where(dataSource => dataSource.Id == dataSourceId)
             .ExecuteDeleteAsync(cancellationToken);
 
-        await cache.RemoveAsync(nameof(GetDataSources), cancellationToken);
+        await cache.RemoveAsync($"{CommonConstants.Cache.Namespace}:*", cancellationToken);
     }
 }
 

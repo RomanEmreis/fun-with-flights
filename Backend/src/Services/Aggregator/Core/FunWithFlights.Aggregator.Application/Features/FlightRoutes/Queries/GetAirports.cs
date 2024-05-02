@@ -15,7 +15,7 @@ internal sealed class GetAirportsHandler(IApplicationContext context, IDistribut
 
     public async Task<AirportsResponse> Handle(GetAirports request, CancellationToken cancellationToken)
     {
-        var cacheKey       = nameof(GetAirports);
+        var cacheKey       = CreateCacheKey();
         var cachedAirports = await cache.GetAsync(cacheKey, cancellationToken);
         
         if (cachedAirports is null)
@@ -48,5 +48,6 @@ internal sealed class GetAirportsHandler(IApplicationContext context, IDistribut
         return JsonSerializer.Deserialize<AirportsResponse>(cachedAirports) ?? new([], []);
     }
 
+    private static string CreateCacheKey() => CommonHelpers.Cache.CreateCacheKey(nameof(GetAirports));
     private static DistributedCacheEntryOptions CreateOptions() => new() { SlidingExpiration = TimeSpan.FromSeconds(DefaultSlidingExpirationSeconds) };
 }
