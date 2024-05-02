@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.AddServiceDefaults();
-builder.AddNpgsqlDbContext<ApplicationContext>("datasourcesdb", null,
+builder.AddNpgsqlDbContext<ApplicationContext>("datasources-db", null,
     optionsBuilder => optionsBuilder.UseNpgsql(npgsqlBuilder =>
         npgsqlBuilder.MigrationsAssembly(typeof(Program).Assembly.GetName().Name)));
 

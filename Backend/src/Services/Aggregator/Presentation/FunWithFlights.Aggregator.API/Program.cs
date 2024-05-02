@@ -8,11 +8,14 @@ var builder = WebApplication.CreateBuilder(args);
 builder.AddServiceDefaults();
 
 // Add services to the container.
-builder.AddNpgsqlDbContext<ApplicationContext>("flightsdb");
+builder.AddNpgsqlDbContext<ApplicationContext>("flights-db");
+
+builder.AddRedisDistributedCache("aggregator-cache");
 
 builder.Services.AddCors();
 builder.Services.AddControllers();
 builder.Services.AddApiVersioning(headerName: "X-Version");
+builder.Services.AddResponseCompression(options => options.EnableForHttps = true);
 builder.Services.AddRateLimiting(builder.Configuration);
 
 builder.Services.AddEndpointsApiExplorer();
@@ -50,6 +53,8 @@ app.UseCors(x => x
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
+
+app.UseResponseCompression();
 
 app.UseRateLimiter();
 

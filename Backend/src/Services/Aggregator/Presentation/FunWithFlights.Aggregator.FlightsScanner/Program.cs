@@ -6,7 +6,8 @@ using FunWithFlights.Aggregator.Infrastructure.Data;
 var builder = Host.CreateApplicationBuilder(args);
 
 builder.AddServiceDefaults();
-builder.AddNpgsqlDbContext<ApplicationContext>("flightsdb");
+builder.AddRedisDistributedCache("aggregator-cache");
+builder.AddNpgsqlDbContext<ApplicationContext>("flights-db");
 
 builder.Services.Configure<FlightScanningOptions>(
     builder.Configuration.GetSection(nameof(FlightScanningOptions)));

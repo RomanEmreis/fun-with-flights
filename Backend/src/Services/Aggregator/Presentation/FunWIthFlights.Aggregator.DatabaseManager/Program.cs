@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.AddServiceDefaults();
-builder.AddNpgsqlDbContext<ApplicationContext>("flightsdb", null,
+builder.AddNpgsqlDbContext<ApplicationContext>("flights-db", null,
     optionsBuilder => optionsBuilder.UseNpgsql(npgsqlBuilder =>
         npgsqlBuilder.MigrationsAssembly(typeof(Program).Assembly.GetName().Name)));
 

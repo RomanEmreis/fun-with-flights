@@ -2,6 +2,8 @@
 
 public sealed class AirportsResponse(IEnumerable<AirportResponse> source, IEnumerable<AirportResponse> destination)
 {
+    public AirportsResponse() : this([], []) {}
+
     public IEnumerable<AirportResponse> AvailableSourceAirports { get; set; } = source;
     public IEnumerable<AirportResponse> AvailableDestinationAirports { get; set; } = destination;
 }
