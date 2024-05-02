@@ -8,6 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Aspire.StackExchange.Redis.DistributedCaching" Version="8.0.0-preview.6.24214.1" />
     <PackageReference Include="linq2db.EntityFrameworkCore" Version="8.0.0-rc.2" />
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.0" />
   </ItemGroup>

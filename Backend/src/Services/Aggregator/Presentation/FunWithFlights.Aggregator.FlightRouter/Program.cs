@@ -1,5 +1,4 @@
 using FunWithFlights.Aggregator.Domain.Entities;
-using System.Linq;
 
 var builder = WebApplication.CreateBuilder(args);
 

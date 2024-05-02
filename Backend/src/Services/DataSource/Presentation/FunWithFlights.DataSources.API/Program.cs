@@ -13,11 +13,14 @@ public class Program
         builder.AddServiceDefaults();
 
         // Add services to the container.
-        builder.AddNpgsqlDbContext<ApplicationContext>("datasourcesdb");
+        builder.AddNpgsqlDbContext<ApplicationContext>("datasources-db");
+
+        builder.AddRedisDistributedCache("datasources-cache");
 
         builder.Services.AddCors();
         builder.Services.AddControllers();
         builder.Services.AddApiVersioning(headerName: "X-Version");
+        builder.Services.AddResponseCompression(options => options.EnableForHttps = true);
         builder.Services.AddRateLimiting(builder.Configuration);
 
         builder.Services.AddEndpointsApiExplorer();
@@ -55,6 +58,8 @@ public class Program
         app.UseHttpsRedirection();
 
         app.UseAuthorization();
+
+        app.UseResponseCompression();
 
         app.UseRateLimiter();
 

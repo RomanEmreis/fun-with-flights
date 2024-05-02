@@ -10,7 +10,7 @@ public class Worker(
     ILogger<Worker> logger,
     IOptions<FlightScanningOptions> options) : BackgroundService
 {
-    private readonly PeriodicTimer _timer = new(TimeSpan.FromMinutes(options.Value.Period));
+    private readonly PeriodicTimer _timer = new(TimeSpan.FromHours(options.Value.Period));
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
