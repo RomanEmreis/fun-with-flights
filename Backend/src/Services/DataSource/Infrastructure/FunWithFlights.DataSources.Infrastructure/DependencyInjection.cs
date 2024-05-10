@@ -1,5 +1,7 @@
 ﻿using FunWithFlights.DataSources.Application.Data;
 using FunWithFlights.DataSources.Infrastructure.Data;
+using FunWithFlights.DataSources.Infrastructure.Messaging;
+using FunWithFlights.Messaging;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace FunWithFlights.DataSources.Infrastructure;
@@ -12,6 +14,8 @@ public static class DependencyInjection
             config.RegisterServicesFromAssemblyContaining<IApplicationContext>());
 
         services.AddDataBase();
+
+        services.AddSingleton<IEventPublisher, DataSourcesEventPublisher>();
 
         return services;
     }

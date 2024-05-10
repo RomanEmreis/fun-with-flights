@@ -1,16 +1,14 @@
-<Project Sdk="Microsoft.NET.Sdk.Worker">
+﻿<Project Sdk="Microsoft.NET.Sdk.Worker">
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-    <UserSecretsId>dotnet-FunWithFlights.Aggregator.FlightsScanner-58e00d84-3f85-4483-9efc-2caca0f23a45</UserSecretsId>
+    <UserSecretsId>dotnet-FunWithFlights.Aggregator.EventHandler-b55a13a2-fec4-4bb0-8cef-2e9201fee487</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Aspire.StackExchange.Redis.DistributedCaching" Version="8.0.0-preview.7.24251.11" />
-    <PackageReference Include="linq2db.EntityFrameworkCore" Version="8.1.0" />
-    <PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.0-preview.7.23375.6" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.0" />
   </ItemGroup>
 
   <ItemGroup>
