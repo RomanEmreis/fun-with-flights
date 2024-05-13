@@ -12,7 +12,7 @@ public record GetRoutes(int Start, int Limit = 10) : IRequest<FlightRoutesRespon
 
 public sealed class GetRoutesHandler(IApplicationContext context, IDistributedCache cache) : IRequestHandler<GetRoutes, FlightRoutesResponse>
 {
-    private const int DefaultSlidingExpirationSeconds = 300;
+    private const int DefaultSlidingExpirationSeconds = 120;
 
     public async Task<FlightRoutesResponse> Handle(GetRoutes request, CancellationToken cancellationToken)
     {

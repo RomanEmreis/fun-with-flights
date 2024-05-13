@@ -12,7 +12,7 @@ public sealed class GetDataSources() : IRequest<DataSourcesResponse>;
 
 internal sealed class GetDataSourcesHandler(IApplicationContext context, IDistributedCache cache) : IRequestHandler<GetDataSources, DataSourcesResponse>
 {
-    private const int DefaultSlidingExpirationHours = 2;
+    private const int DefaultSlidingExpirationSeconds = 120;
 
     public async Task<DataSourcesResponse> Handle(GetDataSources request, CancellationToken cancellationToken)
     {
@@ -48,6 +48,6 @@ internal sealed class GetDataSourcesHandler(IApplicationContext context, IDistri
         Url = dataSource.Url
     };
 
-    private static DistributedCacheEntryOptions CreateOptions() => new() { SlidingExpiration = TimeSpan.FromHours(DefaultSlidingExpirationHours) };
+    private static DistributedCacheEntryOptions CreateOptions() => new() { SlidingExpiration = TimeSpan.FromSeconds(DefaultSlidingExpirationSeconds) };
     private static string CreateCacheKey() => CommonHelpers.Cache.CreateCacheKey($"{nameof(GetDataSources)}");
 }

@@ -16,7 +16,7 @@ public record FindRoutes(
 
 internal sealed class FindRouteHandler(IApplicationContext context, IDistributedCache cache) : IRequestHandler<FindRoutes, FlightRoutesResponse>
 {
-    private const int DefaultSlidingExpirationSeconds = 150;
+    private const int DefaultSlidingExpirationSeconds = 120;
 
     public async Task<FlightRoutesResponse> Handle(FindRoutes request, CancellationToken cancellationToken)
     {

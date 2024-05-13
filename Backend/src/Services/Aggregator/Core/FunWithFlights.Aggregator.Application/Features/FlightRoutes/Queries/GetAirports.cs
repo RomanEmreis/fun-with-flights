@@ -11,7 +11,7 @@ public class GetAirports() : IRequest<AirportsResponse>;
 
 internal sealed class GetAirportsHandler(IApplicationContext context, IDistributedCache cache) : IRequestHandler<GetAirports, AirportsResponse>
 {
-    private const int DefaultSlidingExpirationSeconds = 300;
+    private const int DefaultSlidingExpirationSeconds = 120;
 
     public async Task<AirportsResponse> Handle(GetAirports request, CancellationToken cancellationToken)
     {

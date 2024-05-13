@@ -7,8 +7,15 @@ var messageBus = builder.AddRabbitMQ("message-bus")
     .WithManagementPlugin();
 
 // DataSources
-var dataSourcesRedis = builder.AddRedis("datasources-cache");
-var dataSourcesDb = builder.AddPostgres("data-sources").AddDatabase("datasources-db");
+var dataSourcesRedis = builder
+    .AddRedis("datasources-cache")
+    .WithRedisCommander();
+
+var dataSourcesDb = builder
+    .AddPostgres("data-sources")
+    .WithPgAdmin()
+    .AddDatabase("datasources-db");
+
 builder.AddProject<Projects.FunWithFlights_DataSources_DatabaseManager>("datasources-databasemanager")
     .WithReference(dataSourcesDb);
 
@@ -18,8 +25,15 @@ var dataSourcesApi = builder.AddProject<Projects.FunWithFlights_DataSources_API>
     .WithReference(messageBus);
 
 // Aggregator
-var aggregatorRedis = builder.AddRedis("aggregator-cache");
-var flightsDb = builder.AddPostgres("aggregator").AddDatabase("flights-db");
+var aggregatorRedis = builder
+    .AddRedis("aggregator-cache")
+    .WithRedisCommander();
+
+var flightsDb = builder
+    .AddPostgres("aggregator")
+    .WithPgAdmin()
+    .AddDatabase("flights-db");
+
 var aggregatorApi = builder.AddProject<Projects.FunWithFlights_Aggregator_API>("aggregator-api")
     .WithReference(flightsDb)
     .WithReference(aggregatorRedis);
