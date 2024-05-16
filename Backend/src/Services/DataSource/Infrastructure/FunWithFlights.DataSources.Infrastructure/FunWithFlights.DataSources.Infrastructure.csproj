@@ -8,7 +8,6 @@
 
   <ItemGroup>
     <PackageReference Include="Aspire.Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.0-preview.7.24251.11" />
-    <PackageReference Include="Aspire.RabbitMQ.Client" Version="8.0.0-preview.7.24251.11" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.4">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -16,6 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\Infrastructure\FunWithFlights.Messaging.RabbitMQ\FunWithFlights.Messaging.RabbitMQ.csproj" />
     <ProjectReference Include="..\..\Core\FunWithFlights.DataSources.Application\FunWithFlights.DataSources.Application.csproj" />
   </ItemGroup>
 

@@ -1,13 +1,12 @@
 ﻿using FunWithFlights.DataSources.Application.Data;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Caching.Distributed;
 
 namespace FunWithFlights.DataSources.Application.Features.DataSources.Commands;
 
 public record ChangeDataSourceUrl(int Id, string NewUrl) : IRequest;
 
-internal sealed class ChangeDataSourceUrlHandler(IApplicationContext context, IDistributedCache cache) : IRequestHandler<ChangeDataSourceUrl>
+internal sealed class ChangeDataSourceUrlHandler(IApplicationContext context) : IRequestHandler<ChangeDataSourceUrl>
 {
     public async Task Handle(ChangeDataSourceUrl request, CancellationToken cancellationToken)
     {
@@ -18,6 +17,5 @@ internal sealed class ChangeDataSourceUrlHandler(IApplicationContext context, ID
 
         dataSourceToUpdate.ChangeUrl(newUrl);
         await context.SaveChangesAsync(cancellationToken);
-        await cache.RemoveAsync($"{CommonConstants.Cache.Namespace}:*", cancellationToken);
     }
 }

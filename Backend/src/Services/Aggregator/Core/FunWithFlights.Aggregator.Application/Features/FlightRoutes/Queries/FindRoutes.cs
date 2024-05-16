@@ -16,7 +16,7 @@ public record FindRoutes(
 
 internal sealed class FindRouteHandler(IApplicationContext context, IDistributedCache cache) : IRequestHandler<FindRoutes, FlightRoutesResponse>
 {
-    private const int DefaultSlidingExpirationSeconds = 120;
+    private const int DefaultSlidingExpirationSeconds = 60;
 
     public async Task<FlightRoutesResponse> Handle(FindRoutes request, CancellationToken cancellationToken)
     {
@@ -48,7 +48,12 @@ internal sealed class FindRouteHandler(IApplicationContext context, IDistributed
         return JsonSerializer.Deserialize<FlightRoutesResponse>(cachedFlightRoutes) ?? new([]);
     }
 
-    private static DistributedCacheEntryOptions CreateOptions() => new() { SlidingExpiration = TimeSpan.FromSeconds(DefaultSlidingExpirationSeconds) };
+    private static DistributedCacheEntryOptions CreateOptions() => new()
+    {
+        SlidingExpiration = TimeSpan.FromSeconds(DefaultSlidingExpirationSeconds),
+        AbsoluteExpirationRelativeToNow = TimeSpan.FromSeconds(DefaultSlidingExpirationSeconds * 3)
+    };
+
     private static string CreateCacheKey(FindRoutes request) =>
         CommonHelpers.Cache.CreateCacheKey(
             $"{nameof(FindRoutes)}:sa:{request.SourceAirport}:da:{request.DestinationAirport}:dof:{request.DateOfFlight:yyyy-MM-dd}:dor:{request.DateOfReturn:yyyy-MM-dd}");
