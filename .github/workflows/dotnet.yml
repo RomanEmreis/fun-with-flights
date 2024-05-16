@@ -21,7 +21,7 @@ jobs:
       with:
         dotnet-version: 8.0.x
     - name: Scan for projects
-      run: cd ../Infrastructure/FunWithFlights.AppHost
+      run: cd src/Infrastructure/FunWithFlights.AppHost
     - name: Restore dependencies
       run: dotnet restore
     - name: Build
