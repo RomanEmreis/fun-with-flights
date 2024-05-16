@@ -13,6 +13,9 @@ jobs:
   build:
 
     runs-on: ubuntu-latest
+    defaults:
+      run:
+         working-directory: ./Frontend/FunWithFlightsUI/
 
     strategy:
       matrix:
@@ -27,7 +30,6 @@ jobs:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
         cache-dependency-path: 'Frontend/FunWithFlightsUI/package-lock.json'
-    - run: cd Frontend/FunWithFlightsUI
     - run: ls
     - run: npm ci
     - run: cd src
