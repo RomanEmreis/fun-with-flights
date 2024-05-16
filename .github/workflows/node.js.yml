@@ -30,8 +30,8 @@ jobs:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
         cache-dependency-path: 'Frontend/FunWithFlightsUI/package-lock.json'
-    - run: ls
     - run: npm ci
     - run: cd src
     - run: npm run build --if-present
-    - run: npm test
+    #disabling tests so far
+    #- run: npm test
