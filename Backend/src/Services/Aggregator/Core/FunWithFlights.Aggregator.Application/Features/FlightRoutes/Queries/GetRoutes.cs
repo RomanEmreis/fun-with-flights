@@ -12,7 +12,7 @@ public record GetRoutes(int Start, int Limit = 10) : IRequest<FlightRoutesRespon
 
 public sealed class GetRoutesHandler(IApplicationContext context, IDistributedCache cache) : IRequestHandler<GetRoutes, FlightRoutesResponse>
 {
-    private const int DefaultSlidingExpirationSeconds = 120;
+    private const int DefaultSlidingExpirationSeconds = 60;
 
     public async Task<FlightRoutesResponse> Handle(GetRoutes request, CancellationToken cancellationToken)
     {
@@ -44,5 +44,9 @@ public sealed class GetRoutesHandler(IApplicationContext context, IDistributedCa
     }
 
     private static string CreateCacheKey(GetRoutes request) => CommonHelpers.Cache.CreateCacheKey($"{nameof(GetRoutes)}:s:{request.Start}:l:{request.Limit}");
-    private static DistributedCacheEntryOptions CreateOptions() => new() { SlidingExpiration = TimeSpan.FromSeconds(DefaultSlidingExpirationSeconds) };
+    private static DistributedCacheEntryOptions CreateOptions() => new() 
+    { 
+        SlidingExpiration = TimeSpan.FromSeconds(DefaultSlidingExpirationSeconds),
+        AbsoluteExpirationRelativeToNow = TimeSpan.FromSeconds(DefaultSlidingExpirationSeconds * 3)
+    };
 }

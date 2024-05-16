@@ -2,5 +2,5 @@
 
 public interface IEventPublisher : IDisposable
 {
-    Task PublishAsync<T>(IIntegrationEvent<T> integrationEvent);
+    ValueTask PublishAsync<T>(IIntegrationEvent<T> integrationEvent);
 }
