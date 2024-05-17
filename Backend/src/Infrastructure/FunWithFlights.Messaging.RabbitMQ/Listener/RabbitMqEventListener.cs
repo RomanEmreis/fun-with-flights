@@ -3,52 +3,44 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
-using System.Diagnostics;
-using System.Reflection;
 using System.Text;
 
 namespace FunWithFlights.Messaging.RabbitMQ;
 
-public abstract class RabbitMqEventListener : BackgroundService
+public abstract class RabbitMqEventListener(IConnection connection, ILogger logger, IOptions<MessagingOptions> options) : BackgroundService
 {
-    private readonly MessagingOptions _messagingOptions;
-    private readonly IConnection _connection;
-    private readonly ILogger _logger;
+    private readonly MessagingOptions _messagingOptions = options.Value;
+    private readonly IConnection _connection = connection;
+    private readonly ILogger _logger = logger;
 
-    private IModel? _channel;
+    private readonly IModel _channel = connection.CreateModel();
     private AsyncEventingBasicConsumer? _consumer;
-
-    protected RabbitMqEventListener(IConnection connection, ILogger logger, IOptions<MessagingOptions> options)
-    {
-        _messagingOptions = options.Value;
-        _connection = connection;
-        _logger = logger;
-    }
-
-    public override async Task StartAsync(CancellationToken cancellationToken)
-    {
-        _channel = _connection.CreateModel();
-
-        _channel.ExchangeDeclare(_messagingOptions.Exchange, ExchangeType.Direct, durable: true);
-        foreach (var subscription in _messagingOptions.Subscriptions ?? [])
-        {
-            _channel.QueueDeclare(subscription, exclusive: false, durable: true);
-            _channel.QueueBind(subscription, _messagingOptions.Exchange, subscription, null);
-        }
-
-        await base.StartAsync(cancellationToken);
-    }
 
     protected virtual ValueTask StartListen(CancellationToken cancellationToken = default)
     {
-        _consumer = new AsyncEventingBasicConsumer(_channel);
-        _consumer.Received += OnReceived;
-
-        cancellationToken.Register(OnCancel);
-
-        foreach (var subscription in _messagingOptions.Subscriptions ?? [])
+        try
         {
-            _channel.BasicConsume(subscription, false, _consumer);
+            _channel.ExchangeDeclare(_messagingOptions.Exchange, ExchangeType.Direct, durable: true);
+            _channel.QueueDeclare(_messagingOptions.EventQueue, exclusive: false, durable: true);
+
+            foreach (var subscription in _messagingOptions.Subscriptions ?? [])
+            {
+                _channel.QueueBind(_messagingOptions.EventQueue, _messagingOptions.Exchange, subscription, null);
+            }
+
+            _consumer = new AsyncEventingBasicConsumer(_channel);
+            _consumer.Received += OnReceived;
+            _channel.BasicConsume(_messagingOptions.EventQueue, false, _consumer);
+
+            cancellationToken.Register(OnCancel);
+        }
+        catch (TaskCanceledException)
+        {
+            _logger.LogWarning("Operation has been canceled");
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "An exception occurred:");
         }
 
         return ValueTask.CompletedTask;
@@ -57,21 +49,20 @@ public abstract class RabbitMqEventListener : BackgroundService
     public override Task StopAsync(CancellationToken cancellationToken)
     {
         if (_consumer is not null) _consumer.Received -= OnReceived;
-
+        
+        _channel?.Close();
         return base.StopAsync(cancellationToken);
     }
 
     private void OnCancel()
     {
-        if (_channel is null || _consumer is null) return;
+        if (_consumer is null) return;
 
         foreach (var consumerTag in _consumer.ConsumerTags)
         {
             _channel.BasicCancel(consumerTag);
         }
     }
-
-    private static ActivitySource source = new ActivitySource(Assembly.GetExecutingAssembly().GetName().Name);
 
     private async Task OnReceived(object sender, BasicDeliverEventArgs eventArgs)
     {
@@ -125,9 +116,7 @@ public abstract class RabbitMqEventListener : BackgroundService
     public override void Dispose()
     {
         _consumer = null;
-
-        _channel?.Close();
-        _channel?.Dispose();
+        _channel.Dispose();
 
         base.Dispose();
     }

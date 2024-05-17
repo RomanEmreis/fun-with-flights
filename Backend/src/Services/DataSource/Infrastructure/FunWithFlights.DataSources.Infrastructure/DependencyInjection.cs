@@ -15,7 +15,7 @@ public static class DependencyInjection
 
         services.AddDataBase();
 
-        services.AddSingleton<IEventPublisher, DataSourcesEventPublisher>();
+        services.AddScoped<IEventPublisher, DataSourcesEventPublisher>();
 
         return services;
     }

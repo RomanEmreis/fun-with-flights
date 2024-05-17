@@ -1,15 +1,15 @@
-﻿using FunWithFlights.DataSources.Application;
-using FunWithFlights.Messaging;
+﻿using FunWithFlights.Aggregator.Application;
 using FunWithFlights.Messaging.RabbitMQ.Publisher;
+using FunWithFlights.Messaging;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using RabbitMQ.Client;
 
-namespace FunWithFlights.DataSources.Infrastructure.Messaging;
+namespace FunWithFlights.Aggregator.Infrastructure.Messaging;
 
-internal sealed class DataSourcesEventPublisher(
+internal sealed class AggregatorEventPublisher(
     IConnection connection,
-    ILogger<DataSourcesEventPublisher> logger,
+    ILogger<AggregatorEventPublisher> logger,
     IOptions<MessagingOptions> options)
     : RabbitMqEventPublisher(connection, logger, options)
 {

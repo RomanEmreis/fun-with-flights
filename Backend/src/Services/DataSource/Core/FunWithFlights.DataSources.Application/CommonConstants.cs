@@ -1,9 +1,14 @@
 ﻿namespace FunWithFlights.DataSources.Application;
 
-internal static class CommonConstants
+public static class CommonConstants
 {
-    internal static class Cache
+    public static class Cache
     {
-        internal const string Namespace = "DataSources";
+        public const string Namespace = "DataSources";
+    }
+
+    public static class MessageRouting
+    {
+        public const string Namespace = "DataSources";
     }
 }
