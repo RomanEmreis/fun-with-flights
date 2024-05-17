@@ -1,5 +1,4 @@
 using Asp.Versioning;
-using Azure.Core;
 using FunWithFlights.DataSources.Application.Features.DataSources.Commands;
 using FunWithFlights.DataSources.Application.Features.DataSources.Queries;
 using FunWithFlights.DataSources.Application.Features.DataSources.Responses;
