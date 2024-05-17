@@ -5,7 +5,7 @@ namespace FunWithFlights.Messaging.RabbitMQ;
 
 public static class Extensions
 {
-    public static IBasicProperties CreateEventAttributes<T>(this IModel channel, IIntegrationEvent<T> integrationEvent)
+    public static IBasicProperties CreateEventAttributes(this IModel channel, IIntegrationEvent integrationEvent)
     {
         var properties = channel.CreateBasicProperties();
 

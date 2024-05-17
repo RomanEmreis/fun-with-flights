@@ -1,13 +1,15 @@
 ﻿using FunWithFlights.Aggregator.Application.Data;
 using FunWithFlights.Aggregator.Application.Services.DataSources;
+using FunWithFlights.Aggregator.Application.Services.FlightsProvider;
 using FunWithFlights.Aggregator.Infrastructure.Services.DataSources;
+using FunWithFlights.Aggregator.Infrastructure.Services.FlightsProvider;
+using FunWithFlights.Aggregator.Infrastructure.Data;
+using FunWithFlights.Aggregator.Infrastructure.Messaging;
+using FunWithFlights.Messaging;
+using FunWithFlights.ServiceDefaults.Options;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
-using FunWithFlights.Aggregator.Application.Services.FlightsProvider;
-using FunWithFlights.Aggregator.Infrastructure.Services.FlightsProvider;
-using FunWithFlights.ServiceDefaults.Options;
-using FunWithFlights.Aggregator.Infrastructure.Data;
 
 namespace FunWithFlights.Aggregator.Infrastructure;
 
@@ -19,6 +21,8 @@ public static class DependencyInjection
             config.RegisterServicesFromAssemblyContaining<IApplicationContext>());
 
         services.AddDataBase();
+
+        services.AddSingleton<IEventPublisher, AggregatorEventPublisher>();
 
         var retryPolicyOptions = new RetryPolicyOptions();
         configuration.GetSection(nameof(RetryPolicyOptions)).Bind(retryPolicyOptions);

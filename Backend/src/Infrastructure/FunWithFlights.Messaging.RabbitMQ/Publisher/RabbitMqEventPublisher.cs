@@ -18,8 +18,32 @@ public abstract class RabbitMqEventPublisher : IEventPublisher
         _messagingOptions = options.Value;
 
         _channel.ExchangeDeclare(_messagingOptions.Exchange, ExchangeType.Direct, durable: true);
-        _channel.QueueDeclare(_messagingOptions.Queue, exclusive: false, durable: true);
-        _channel.QueueBind(_messagingOptions.Queue, _messagingOptions.Exchange, _messagingOptions.Queue, null);
+    }
+
+    public abstract string RoutingKeyPrefix { get; }
+
+    public ValueTask PublishAsync(IIntegrationEvent integrationEvent)
+    {
+        _logger.LogInformation(
+            "Publishing: {name}, version: {version}",
+            integrationEvent.Type,
+            integrationEvent.Version);
+
+        var properties = _channel.CreateEventAttributes(integrationEvent);
+        var body = JsonSerializer.SerializeToUtf8Bytes(integrationEvent);
+
+        _channel.BasicPublish(
+            exchange: _messagingOptions.Exchange,
+            routingKey: $"{RoutingKeyPrefix}:{integrationEvent.Type}",
+            properties,
+            body);
+
+        _logger.LogInformation(
+            "Event: {name}, version: {version} has been successfully published",
+            integrationEvent.Type,
+            integrationEvent.Version);
+
+        return ValueTask.CompletedTask;
     }
 
     public ValueTask PublishAsync<T>(IIntegrationEvent<T> integrationEvent)
@@ -34,7 +58,7 @@ public abstract class RabbitMqEventPublisher : IEventPublisher
 
         _channel.BasicPublish(
             exchange: _messagingOptions.Exchange,
-            routingKey: _messagingOptions.Queue,
+            routingKey: $"{RoutingKeyPrefix}:{integrationEvent.Type}",
             properties,
             body);
 

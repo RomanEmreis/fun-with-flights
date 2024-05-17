@@ -1,4 +1,5 @@
-﻿using FunWithFlights.Aggregator.Application.Features.FlightRoutes.Events;
+﻿using FunWithFlights.Aggregator.Application.Features.FlightRoutes.Commands;
+using FunWithFlights.Aggregator.Application.Features.FlightRoutes.Events;
 using FunWithFlights.Messaging;
 using FunWithFlights.Messaging.RabbitMQ;
 using MediatR;
@@ -15,8 +16,6 @@ public sealed class EventListener(
     IOptions<MessagingOptions> options,
     ILogger<EventListener> logger) : RabbitMqEventListener(connection, logger, options)
 {
-    public override async Task StartAsync(CancellationToken cancellationToken) => await base.StartAsync(cancellationToken);
-
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
         stoppingToken.ThrowIfCancellationRequested();
@@ -38,9 +37,8 @@ public sealed class EventListener(
         return type switch
         {
             nameof(DataSourceAddedEvent) => JsonSerializer.Deserialize<DataSourceAddedEvent>(eventArgs.Body.Span),
+            nameof(RefreshFlightRoutes) => JsonSerializer.Deserialize<RefreshFlightRoutes>(eventArgs.Body.Span),
             _ => throw new NotSupportedException($"Unsupported event type: {type}")
         };
     }
-
-    public override void Dispose() => base.Dispose();
 }

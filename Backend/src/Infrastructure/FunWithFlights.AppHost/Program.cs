@@ -36,7 +36,8 @@ var flightsDb = builder
 
 var aggregatorApi = builder.AddProject<Projects.FunWithFlights_Aggregator_API>("aggregator-api")
     .WithReference(flightsDb)
-    .WithReference(aggregatorRedis);
+    .WithReference(aggregatorRedis)
+    .WithReference(messageBus);
 
 builder.AddProject<Projects.FunWIthFlights_Aggregator_DatabaseManager>("aggregator-databasemanager")
     .WithReference(flightsDb);

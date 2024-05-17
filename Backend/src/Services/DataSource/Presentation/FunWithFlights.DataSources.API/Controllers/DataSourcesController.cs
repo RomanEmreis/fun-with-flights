@@ -1,6 +1,7 @@
 using Asp.Versioning;
 using FunWithFlights.DataSources.Application.Features.DataSources.Commands;
 using FunWithFlights.DataSources.Application.Features.DataSources.Queries;
+using FunWithFlights.DataSources.Application.Features.DataSources.Responses;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -24,6 +25,7 @@ public class DataSourcesController(IMediator mediator) : ControllerBase
     ///     A list of available data sources
     /// </returns>
     [HttpGet("all")]
+    [Produces<DataSourcesResponse>]
     public async Task<IActionResult> GetDataSources(CancellationToken cancellationToken)
     {
         var results = await mediator.Send(new GetDataSources(), cancellationToken);

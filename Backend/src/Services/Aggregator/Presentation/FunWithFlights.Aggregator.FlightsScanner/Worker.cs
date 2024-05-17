@@ -5,10 +5,7 @@ using Microsoft.Extensions.Options;
 
 namespace FunWithFlights.Aggregator.FlightsScanner;
 
-public class Worker(
-    IServiceScopeFactory serviceScopeFactory,
-    ILogger<Worker> logger,
-    IOptions<FlightScanningOptions> options) : BackgroundService
+public class Worker(IServiceScopeFactory serviceScopeFactory, ILogger<Worker> logger, IOptions<FlightScanningOptions> options) : BackgroundService
 {
     private readonly PeriodicTimer _timer = new(TimeSpan.FromHours(options.Value.Period));
 
@@ -26,16 +23,20 @@ public class Worker(
 
             try
             {
-                await mediator.Publish(new RefreshFlightRoutes(), stoppingToken);
+                await mediator.Publish(new RefreshFlightRoutes(DateTime.Now), stoppingToken);
+            }
+            catch (TaskCanceledException)
+            {
+                logger.LogWarning("Operation has been canceled");
             }
             catch (Exception ex)
             {
-                logger.LogError(ex, "An error occurred while updating data sources");
+                logger.LogError(ex, "An error occurred while updating data sources:");
             }
         }
         while (
-            await _timer.WaitForNextTickAsync(stoppingToken) &&
-            !stoppingToken.IsCancellationRequested);
+            !stoppingToken.IsCancellationRequested &&
+            await _timer.WaitForNextTickAsync(stoppingToken));
     }
 
     public override void Dispose()
