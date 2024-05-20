@@ -1,5 +1,7 @@
 using Asp.Versioning;
+using FunWithFlights.Aggregator.Application.Features.FlightRoutes.Commands;
 using FunWithFlights.Aggregator.Application.Features.FlightRoutes.Queries;
+using FunWithFlights.Aggregator.Application.Features.FlightRoutes.Responses;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
@@ -27,6 +29,7 @@ public class FlightRoutesController(IMediator mediator) : ControllerBase
     ///     A page that includes a list of flight routes
     /// </returns>
     [HttpGet("list")]
+    [Produces<FlightRoutesResponse>]
     public async Task<IActionResult> FindFlightRoutes(
         [Range(0, int.MaxValue)] int start,
         [Range(10, 100)] int limit,
@@ -55,6 +58,7 @@ public class FlightRoutesController(IMediator mediator) : ControllerBase
     ///     A list of flight routes
     /// </returns>
     [HttpPut("find")]
+    [Produces<FlightRoutesResponse>]
     public async Task<IActionResult> FindFlightRoutes(FindRoutes command, CancellationToken cancellationToken)
     {
         var results = await mediator.Send(command, cancellationToken);
@@ -74,9 +78,27 @@ public class FlightRoutesController(IMediator mediator) : ControllerBase
     ///     A list of airports
     /// </returns>
     [HttpGet("airports")]
+    [Produces<AirportsResponse>]
     public async Task<IActionResult> GetAirports(CancellationToken cancellationToken)
     {
         var results = await mediator.Send(new GetAirports(), cancellationToken);
         return Ok(results);
+    }
+
+    /// <summary>
+    ///     Refreshes all flight routes and airport list
+    /// </summary>
+    /// <param name="cancellationToken"></param>
+    /// <remarks>
+    /// Sample request:
+    ///
+    ///     POST /api/flight-routes/refresh
+    ///
+    /// </remarks>
+    [HttpPost("refresh")]
+    public async Task<IActionResult> Refresh(CancellationToken cancellationToken)
+    {
+        await mediator.Send(new RefreshFlightRoutesAsync(), cancellationToken);
+        return Accepted();
     }
 }

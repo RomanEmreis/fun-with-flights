@@ -45,7 +45,7 @@ namespace FunWithFlights.Aggregator.Application.Tests.Features.FlightRoutes.Comm
                 .Setup(context =>
                     context.UseTransaction(It.IsAny<Func<IApplicationContext, CancellationToken, Task>>(), It.IsAny<string>(), CancellationToken.None));
 
-            var command = new RefreshFlightRoutes();
+            var command = new RefreshFlightRoutes(DateTime.Now);
 
             await Publish(command);
 
@@ -75,7 +75,7 @@ namespace FunWithFlights.Aggregator.Application.Tests.Features.FlightRoutes.Comm
                     It.IsAny<Exception>(),
                     It.IsAny<Func<It.IsAnyType, Exception?, string>>()));
 
-            var command = new RefreshFlightRoutes();
+            var command = new RefreshFlightRoutes(DateTime.Now);
 
             await Publish(command);
 

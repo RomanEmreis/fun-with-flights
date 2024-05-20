@@ -1,5 +1,6 @@
 using FunWithFlights.Aggregator.Infrastructure;
 using FunWithFlights.Aggregator.Infrastructure.Data;
+using FunWithFlights.Messaging;
 using Microsoft.OpenApi.Models;
 using System.Reflection;
 
@@ -11,6 +12,10 @@ builder.AddServiceDefaults();
 builder.AddNpgsqlDbContext<ApplicationContext>("flights-db");
 
 builder.AddRedisDistributedCache("aggregator-cache");
+
+builder.AddRabbitMQClient("message-bus");
+builder.Services.Configure<MessagingOptions>(
+    builder.Configuration.GetSection(nameof(MessagingOptions)));
 
 builder.Services.AddCors();
 builder.Services.AddControllers();

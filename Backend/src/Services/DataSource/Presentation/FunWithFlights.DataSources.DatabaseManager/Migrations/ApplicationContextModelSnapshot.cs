@@ -16,7 +16,7 @@ namespace FunWithFlights.DataSources.DatabaseManager.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.0")
+                .HasAnnotation("ProductVersion", "8.0.4")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -49,8 +49,8 @@ namespace FunWithFlights.DataSources.DatabaseManager.Migrations
                         {
                             Id = 1,
                             Description = "Mock Flight Routes Provider",
-                            Name = "FlightRouter",
-                            Url = "https://localhost:7001/flight-routes"
+                            Name = "FlightRouter v1",
+                            Url = "http://localhost:5156/flight-routes"
                         });
                 });
 #pragma warning restore 612, 618

@@ -11,7 +11,7 @@ public class GetAirports() : IRequest<AirportsResponse>;
 
 internal sealed class GetAirportsHandler(IApplicationContext context, IDistributedCache cache) : IRequestHandler<GetAirports, AirportsResponse>
 {
-    private const int DefaultSlidingExpirationSeconds = 300;
+    private const int DefaultSlidingExpirationSeconds = 60;
 
     public async Task<AirportsResponse> Handle(GetAirports request, CancellationToken cancellationToken)
     {
@@ -49,5 +49,9 @@ internal sealed class GetAirportsHandler(IApplicationContext context, IDistribut
     }
 
     private static string CreateCacheKey() => CommonHelpers.Cache.CreateCacheKey(nameof(GetAirports));
-    private static DistributedCacheEntryOptions CreateOptions() => new() { SlidingExpiration = TimeSpan.FromSeconds(DefaultSlidingExpirationSeconds) };
+    private static DistributedCacheEntryOptions CreateOptions() => new()
+    {
+        SlidingExpiration = TimeSpan.FromSeconds(DefaultSlidingExpirationSeconds),
+        AbsoluteExpirationRelativeToNow = TimeSpan.FromSeconds(DefaultSlidingExpirationSeconds * 3)
+    };
 }

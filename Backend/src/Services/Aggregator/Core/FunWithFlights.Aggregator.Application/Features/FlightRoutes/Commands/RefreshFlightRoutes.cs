@@ -4,22 +4,33 @@ using FunWithFlights.Aggregator.Application.Features.FlightRoutes.Responses;
 using FunWithFlights.Aggregator.Application.Services.DataSources;
 using FunWithFlights.Aggregator.Application.Services.FlightsProvider;
 using FunWithFlights.Aggregator.Domain.Entities;
+using FunWithFlights.Messaging;
 using LinqToDB.EntityFrameworkCore;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Logging;
 using System.Diagnostics;
 
 namespace FunWithFlights.Aggregator.Application.Features.FlightRoutes.Commands;
 
-public class RefreshFlightRoutes() : INotification;
+public class RefreshFlightRoutesAsync() : IRequest;
+public class RefreshFlightRoutes(DateTime occurredAt) : INotification, IIntegrationEvent
+{
+    public DateTime OccurredAt { get; init; } = occurredAt;
+    public string Type { get; init; } = nameof(RefreshFlightRoutes);
+    public string Version { get; init; } = "1.0.0";
+}
+
+internal sealed class RefreshFlightRoutesAsyncHandler(IEventPublisher publisher) : IRequestHandler<RefreshFlightRoutesAsync>
+{
+    public async Task Handle(RefreshFlightRoutesAsync request, CancellationToken cancellationToken) => 
+        await publisher.PublishAsync(new RefreshFlightRoutes(DateTime.Now));
+}
 
 internal sealed class RefreshFlightRoutesHandler(
     IDataSourcesService dataSourcesService,
     IFlightsProviderService flightsProviderService,
     IApplicationContext context,
-    IDistributedCache cache,
     ILogger<RefreshFlightRoutes> logger) : INotificationHandler<RefreshFlightRoutes>
 {
     public async Task Handle(RefreshFlightRoutes request, CancellationToken cancellationToken)
@@ -78,8 +89,6 @@ internal sealed class RefreshFlightRoutesHandler(
         }, 
         errorMessage: "An exception occurred while scanning flight routes",
         cancellationToken);
-
-        await cache.RemoveAsync($"{CommonConstants.Cache.Namespace}:*", cancellationToken);
 
         logger.LogInformation("Scanning finished in {ElapsedMilliseconds}ms", sw.ElapsedMilliseconds);
     }

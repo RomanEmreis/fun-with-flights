@@ -1,0 +1,18 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Worker">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>dotnet-FunWithFlights.Aggregator.EventHandler-b55a13a2-fec4-4bb0-8cef-2e9201fee487</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\Infrastructure\FunWithFlights.ServiceDefaults\FunWithFlights.ServiceDefaults.csproj" />
+    <ProjectReference Include="..\..\Infrastructure\FunWithFlights.Aggregator.Infrastructure\FunWithFlights.Aggregator.Infrastructure.csproj" />
+  </ItemGroup>
+</Project>
