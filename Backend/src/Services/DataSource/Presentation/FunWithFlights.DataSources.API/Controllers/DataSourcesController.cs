@@ -47,10 +47,11 @@ public class DataSourcesController(IMediator mediator) : ControllerBase
     ///
     /// </remarks>
     [HttpPost("add")]
+    [ProducesResponseType(StatusCodes.Status202Accepted)]
     public async Task<IActionResult> AddDataSource(AddNewDataSource command, CancellationToken cancellationToken)
     {
         await mediator.Send(command, cancellationToken);
-        return Created();
+        return Accepted();
     }
 
     /// <summary>

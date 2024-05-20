@@ -1,6 +1,6 @@
 ﻿using FunWithFlights.DataSources.Application.Data;
+using FunWithFlights.DataSources.Application.Features.DataSources.Extensions;
 using FunWithFlights.DataSources.Application.Features.DataSources.Responses;
-using FunWithFlights.DataSources.Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Distributed;
@@ -22,7 +22,7 @@ internal sealed class GetDataSourcesHandler(IApplicationContext context, IDistri
         if (cachedDataSources is null)
         {
             var dataSources = await context.DataSources
-                .Select(dataSource => ConvertToResponse(dataSource))
+                .Select(dataSource => dataSource.ToResponse())
                 .ToListAsync(cancellationToken);
 
             var response = new DataSourcesResponse(dataSources);
@@ -39,14 +39,6 @@ internal sealed class GetDataSourcesHandler(IApplicationContext context, IDistri
 
         return JsonSerializer.Deserialize<DataSourcesResponse>(cachedDataSources) ?? new([]);
     }
-
-    private static DataSourceResponse ConvertToResponse(DataSource dataSource) => new()
-    {
-        Id = dataSource.Id,
-        Name = dataSource.Name,
-        Description = dataSource.Description,
-        Url = dataSource.Url
-    };
 
     private static DistributedCacheEntryOptions CreateOptions() => new()
     {
