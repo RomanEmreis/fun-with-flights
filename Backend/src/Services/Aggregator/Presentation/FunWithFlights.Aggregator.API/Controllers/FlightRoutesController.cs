@@ -96,6 +96,7 @@ public class FlightRoutesController(IMediator mediator) : ControllerBase
     ///
     /// </remarks>
     [HttpPost("refresh")]
+    [ProducesResponseType(StatusCodes.Status202Accepted)]
     public async Task<IActionResult> Refresh(CancellationToken cancellationToken)
     {
         await mediator.Send(new RefreshFlightRoutesAsync(), cancellationToken);
