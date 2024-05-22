@@ -16,7 +16,7 @@ public class FlightsProviderServiceTests
         var fakeHttpClient = new Mock<HttpClient>();
         var service = new FlightsProviderService(fakeHttpClient.Object);
 
-        Func<Task> act = () => service.GetFlightRoutesAsync(url);
+        Func<Task> act = () => service.GetFlightRoutesAsync(url!);
 
         act.Should().ThrowExactlyAsync<ArgumentException>();
     }
