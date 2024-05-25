@@ -6,6 +6,8 @@ name: .NET Aspire
 on:
   push:
     branches: [ "main" ]
+    paths:
+      - 'backend/**'
   pull_request:
     branches: [ "main" ]
 
