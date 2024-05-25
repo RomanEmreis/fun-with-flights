@@ -1,6 +1,6 @@
 var builder = DistributedApplication.CreateBuilder(args);
 
-// FlightRouter - mock service that provides flight routes
+// FlightRouter v1 - mock service that provides flight routes
 builder.AddProject<Projects.FunWithFlights_Aggregator_FlightRouter>("flightrouter");
 
 var messageBus = builder.AddRabbitMQ("message-bus")
